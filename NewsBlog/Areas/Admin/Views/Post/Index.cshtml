@@ -1,0 +1,77 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+
+@model IPagedList<NewsBlog.ViewModels.PostListViewModel>
+@{
+    ViewData["Title"] = "Post list";
+}
+
+<div class="container-fluid">
+    <a class="btn btn-success mb-3" asp-action="Create" asp-controller="Post" asp-area="Admin">Create post</a>
+    <div class="card">
+        <div class="card-header bg-dark">
+            <h4 class="card-title text-white">Posts List</h4>
+        </div>
+        <div class="card-body" style="background-color:lightgray; padding: 20px;">
+            @foreach (var post in Model)
+            {
+                <div class="rounded mb-4 bg-white p-3" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);">
+                    <div class="row align-items-center">
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-12">
+                            @if (post.ImageUrl == null)
+                            {
+                                <img src="~/images/uploadImage.jpg" style="object-fit:cover; height:100%; width:100%; border-radius: 5px;">
+                            }
+                            else
+                            {
+                                <img src="~/images/@post.ImageUrl" style="object-fit:cover; height:100%; width:100%; border-radius: 5px;">
+                            }
+                        </div>
+
+                        <div class="col-lg-7 col-md-9 col-sm-8 col-12">
+                            <h4 style="font-weight:bold; color:#353839;">@post.Title</h4>
+                            <p>
+                                @Html.Raw(post.Description!.Length <= 200 ? post.Description : post.Description.Substring(0, 200) + "...")
+                            </p>
+
+                            <p style="font-size:0.9rem;">@post.CreatedAt</p>
+                        </div>
+                        <div class="col-lg-3 col-md-12 col-sm-12 col-12 text-lg-right text-start">
+                            <h5 class="fw-bold" style="margin-bottom: 0.5rem;">Writer: @post.AuthorName</h5>
+                            <p>
+                                <a class="btn btn-warning btn-sm" style="margin-right: 5px;" asp-area="Admin" asp-controller="Post" asp-action="Edit" asp-route-id="@post.Id" method="post">Edit</a>
+                                <form asp-area="Admin" asp-controller="Post" asp-action="Delete" asp-route-id="@post.Id" method="post" onsubmit="return confirm('Are you sure about deleting the post?')">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="card-footer">
+            Page @(Model?.PageCount < Model!.PageNumber ? 0 : Model!.PageNumber) of @Model!.PageCount
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }),
+                     new PagedListRenderOptions()
+            {
+                Display = PagedListDisplayMode.IfNeeded,
+                DisplayPageCountAndCurrentLocation = false,
+                DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+                DisplayLinkToNextPage = PagedListDisplayMode.Always,
+                DisplayLinkToIndividualPages = true,
+                MaximumPageNumbersToDisplay = 5,
+                ContainerDivClasses = new List<string> { "d-flex", "justify-content-center" },
+                UlElementClasses = new List<string> { "pagination" },
+                LiElementClasses = new List<string> { "page-item" },
+                PageClasses = new List<string> { "page-link", "btn", "btn-primary" }, // Apply button classes here
+                ActiveLiElementClass = "active"
+            })
+
+        </div>
+    </div>
+</div>
+
+
