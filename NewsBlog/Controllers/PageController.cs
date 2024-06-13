@@ -10,6 +10,11 @@ namespace NewsBlog.Controllers
     public class PageController : Controller
     {
         private readonly AppDbContext _db;
+
+        //weather api
+        private readonly string apiKey = "ff24c72efe3238fcc138631c67bcc428";
+        private readonly string city = "copenhagen";
+
         public PageController(AppDbContext db)
         {
             _db = db;
@@ -38,8 +43,6 @@ namespace NewsBlog.Controllers
             };
             return View(pageViewModel);
         }
-        private readonly string apiKey = "ff24c72efe3238fcc138631c67bcc428"; // Replace with your OpenWeatherMap API key
-        private readonly string city = "copenhagen"; // Replace with the desired city
 
         public async Task<IActionResult> Weather()
         {
@@ -71,6 +74,3 @@ namespace NewsBlog.Controllers
         }
     }
 }
-
-
-

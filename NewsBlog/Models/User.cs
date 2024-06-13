@@ -4,7 +4,7 @@ namespace NewsBlog.Models
 {
     public class User:IdentityUser
     {
-        //Auther
+        //User
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         

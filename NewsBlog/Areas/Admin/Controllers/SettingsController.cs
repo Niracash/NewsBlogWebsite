@@ -30,9 +30,7 @@ namespace NewsBlog.Areas.Admin.Controllers
             var settings = await _db.Settings!.FirstOrDefaultAsync();
             if (settings == null)
             {
-                // Optionally handle the case where settings are not found.
-                // This should be rare as DataInitializer sets default settings.
-                return View("Error"); // or a suitable response
+                return View("Error");
             }
 
             var settingsViewModel = new SettingsViewModel()

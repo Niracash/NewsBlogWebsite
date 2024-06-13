@@ -7,17 +7,13 @@
 @model NewsBlog.ViewModels.HomeViewModel
 @{
     ViewData["Title"] = "Home";
-
 }
 
 <!-- Page Header-->
 <div class="container-fluid">
-    <!-- Change to container-fluid -->
     <header class="my-5">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <!-- Removed the inline style for width and max-width -->
-
                 <div class="text-center mt-5">
                     <h1>@Model.Title</h1>
                     <span class="subheading">@Model.Description</span>
@@ -29,48 +25,18 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            
-@*             @foreach(var post in Model.Posts!)
-            {
-                <!-- Post preview-->
-                <div class="post-preview mb-5">
-                    <a href="post.html">
-                        <div class="col-lg-2 col-md-3 col-sm-4 col-12">
-                            @if (post.ImageUrl != null)
-                            {
-                                <img src="~/images/@post.ImageUrl" style="object-fit:cover; height:100%; width:100%; border-radius: 5px;">
-                            }
-                        </div>
-                        <h2 class="post-title">@post.Title</h2>
-                        <h3 class="post-subtitle">@post.Summary</h3>
-                    </a>
-                    <p class="post-meta">
-                        Posted by
-                        <a href="#!">@post.User!.FirstName @post.User.LastName</a>
-                        on @post.CreatedAt.ToString("MMMM dd, yyyy HH:mm")
-                    </p>
-                </div>
-                <hr class="my-4" />
-                
-            } *@
-
             @foreach (var post in Model.Posts!)
             {
                 <!-- Post preview-->
-                <div class="post-preview mb-5">
+                <div class="post-preview mb-5 shadow-lg p-4 bg-white rounded">
                     <a asp-controller="Content" asp-action="Article" asp-route-slug="@post.Slug">
-                        <!-- Check if the image URL exists -->
                         @if (post.ImageUrl != null)
                         {
-                            <div class="w-100">
-                                <!-- Fills the width of the parent div -->
-                                <!-- Image with Bootstrap classes for responsive and fixed height -->
+                            <div class="w-100 mb-3">
                                 <img src="~/images/@post.ImageUrl" class="img-fluid rounded" style="object-fit:cover; height:400px; width:100%;">
                             </div>
                         }
-
                         @{
-                            // Decode HTML entities and strip out HTML tags
                             var decodedDescription = WebUtility.HtmlDecode(post.Description!);
                             var cleanDescription = Regex.Replace(decodedDescription, "<.*?>", String.Empty);
                             var displaySummary = cleanDescription.Length > 350
@@ -82,13 +48,10 @@
                     </a>
                     <p class="post-meta text-end" style="font-size: 0.8em;">
                         Posted by
-                        <a href="#!" style="font-size: 0.8em;">@post.User!.FirstName @post.User.LastName</a>
+                        <span style="font-weight: bold;">@post.User!.FirstName @post.User.LastName</span>
                         <br />
-                        <small>
-                            @post.CreatedAt.ToString("MMMM dd, yyyy HH:mm")
-                        </small>
+                        <small>@post.CreatedAt.ToString("MMMM dd, yyyy HH:mm")</small>
                     </p>
-
                 </div>
                 <hr class="my-4" />
             }
@@ -108,15 +71,9 @@
                 ContainerDivClasses = new List<string> { "d-flex", "justify-content-end" },
                 UlElementClasses = new List<string> { "pagination" },
                 LiElementClasses = new List<string> { "page-item" },
-                PageClasses = new List<string> { "page-link", "btn", "btn-primary" }, // Apply button classes here
+                PageClasses = new List<string> { "page-link", "btn", "btn-primary" },
                 ActiveLiElementClass = "active"
             })
-
-
-            <!-- Pager-->
-            <div class="d-flex justify-content-end mb-4">
-                <a class="btn btn-primary text-uppercase" href="#!">Older Posts →</a>
-            </div>
         </div>
     </div>
 </div>

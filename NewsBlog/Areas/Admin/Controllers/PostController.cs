@@ -155,6 +155,15 @@ namespace NewsBlog.Areas.Admin.Controllers
             var userRole = await _userManager.GetRolesAsync(user!);
             if (userRole[0] == Roles.Admin || user?.Id == autherPost?.UserId)
             {
+                // Delete the image from the server
+                if (!string.IsNullOrEmpty(autherPost!.ImageUrl))
+                {
+                    var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "images", autherPost.ImageUrl);
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                }
 
                 _db.Posts!.Remove(autherPost!);
                 await _db.SaveChangesAsync();

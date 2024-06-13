@@ -99,7 +99,7 @@ namespace NewsBlog.Areas.Admin.Controllers
             }
             else
             {
-                _notification.Error("Password should contain capital letter and special character.");
+                _notification.Error("Password should contain at least 8 letters, a capital letter and a special character.");
             }
             return View(registerViewModel);
         }
@@ -145,6 +145,10 @@ namespace NewsBlog.Areas.Admin.Controllers
                 _notification.Success("Password successfully reseted");
                 return RedirectToAction(nameof(Index));
 
+            }
+            else
+            {
+                _notification.Error("Password should contain at least 8 letters, a capital letter and a special character.");
             }
             return View(passwordResetViewModel);
         }

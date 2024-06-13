@@ -12368,3 +12368,72 @@ header.masthead {
         font-size: 2.25rem;
     }
 }
+
+/* Custom CSS styles for NewsBlog */
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f8f9fa;
+    color: #343a40;
+}
+
+header {
+    background: linear-gradient(90deg, #4b6cb7, #182848);
+    color: white;
+    padding: 4rem 0;
+}
+
+    header h1 {
+        font-family: 'Lora', serif;
+        font-size: 3rem;
+        font-weight: 700;
+    }
+
+    header .subheading {
+        font-size: 1.5rem;
+        font-weight: 400;
+    }
+
+.navbar {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+    .navbar .nav-link {
+        color: #343a40;
+        font-weight: 600;
+    }
+
+        .navbar .nav-link:hover {
+            color: #007bff;
+        }
+
+.post-preview {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+    .post-preview:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+footer {
+    padding: 2rem 0;
+    background-color: #343a40;
+    color: white;
+}
+
+    footer .fa-stack {
+        color: #6c757d;
+    }
+
+        footer .fa-stack:hover {
+            color: #007bff;
+        }
+
+    footer .small {
+        color: #6c757d;
+    }

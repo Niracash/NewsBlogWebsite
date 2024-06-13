@@ -13,8 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddControllersWithViews();
-var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
 
+var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
 builder.Services.AddDbContext<AppDbContext>(
     options => options.UseSqlServer(connectionString));
 

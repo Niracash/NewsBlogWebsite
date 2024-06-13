@@ -4,12 +4,12 @@
 @{
     var settings = _db.Settings!.ToList();
     var settingsViewModel = new SettingsViewModel()
-    {
-        Logo = settings[0].Logo,
-        TwitterUrl = settings[0].TwitterUrl,
-        FacebookUrl = settings[0].FacebookUrl,
-        GithubUrl = settings[0].GithubUrl,
-    };
+            {
+                Logo = settings[0].Logo,
+                TwitterUrl = settings[0].TwitterUrl,
+                FacebookUrl = settings[0].FacebookUrl,
+                GithubUrl = settings[0].GithubUrl,
+            };
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +28,7 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="~/MainPage/css/styles.css" rel="stylesheet" />
 </head>
-<body>
+<body id="page-top">
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
         <div class="container px-4 px-lg-5">
@@ -50,7 +50,7 @@
 
     <!-- Main Content-->
     @RenderBody()
-    <!-- Footer-->
+
     <!-- Footer-->
     <footer class="border-top">
         <div class="container px-4 px-lg-5">
@@ -58,7 +58,7 @@
                 <div class="col-md-10 col-lg-8 col-xl-7">
                     <ul class="list-inline text-center">
                         <li class="list-inline-item">
-                            <a href="@settingsViewModel.TwitterUrl">
+                            <a href="@settingsViewModel.TwitterUrl" target="_blank">
                                 <span class="fa-stack">
                                     <i class="fas fa-circle fa-2x"></i>
                                     <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
@@ -66,7 +66,7 @@
                             </a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="@settingsViewModel.FacebookUrl">
+                            <a href="@settingsViewModel.FacebookUrl" target="_blank">
                                 <span class="fa-stack">
                                     <i class="fas fa-circle fa-2x"></i>
                                     <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
@@ -74,7 +74,7 @@
                             </a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="@settingsViewModel.GithubUrl">
+                            <a href="@settingsViewModel.GithubUrl" target="_blank">
                                 <span class="fa-stack">
                                     <i class="fas fa-circle fa-2x"></i>
                                     <i class="fab fa-github fa-stack-1x fa-inverse"></i>
@@ -86,7 +86,9 @@
                 </div>
             </div>
         </div>
-    </footer>    <!-- Bootstrap core JS-->
+    </footer>
+
+    <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="~/MainPage/js/scripts.js"></script>
