@@ -13,42 +13,55 @@
         <div class="card-header bg-dark">
             <h4 class="card-title text-white">Posts List</h4>
         </div>
-        <div class="card-body" style="background-color:lightgray; padding: 20px;">
-            @foreach (var post in Model)
-            {
-                <div class="rounded mb-4 bg-white p-3" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);">
-                    <div class="row align-items-center">
-                        <div class="col-lg-2 col-md-3 col-sm-4 col-12">
-                            @if (post.ImageUrl == null)
-                            {
-                                <img src="~/images/uploadImage.jpg" style="object-fit:cover; height:100%; width:100%; border-radius: 5px;">
-                            }
-                            else
-                            {
-                                <img src="~/images/@post.ImageUrl" style="object-fit:cover; height:100%; width:100%; border-radius: 5px;">
-                            }
-                        </div>
-
-                        <div class="col-lg-7 col-md-9 col-sm-8 col-12">
-                            <h4 style="font-weight:bold; color:#353839;">@post.Title</h4>
-                            <p>
-                                @Html.Raw(post.Description!.Length <= 200 ? post.Description : post.Description.Substring(0, 200) + "...")
-                            </p>
-
-                            <p style="font-size:0.9rem;">@post.CreatedAt</p>
-                        </div>
-                        <div class="col-lg-3 col-md-12 col-sm-12 col-12 text-lg-right text-start">
-                            <h5 class="fw-bold" style="margin-bottom: 0.5rem;">Writer: @post.AuthorName</h5>
-                            <p>
-                                <a class="btn btn-warning btn-sm" style="margin-right: 5px;" asp-area="Admin" asp-controller="Post" asp-action="Edit" asp-route-id="@post.Id" method="post">Edit</a>
-                                <form asp-area="Admin" asp-controller="Post" asp-action="Delete" asp-route-id="@post.Id" method="post" onsubmit="return confirm('Are you sure about deleting the post?')">
-                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                </form>
-                            </p>
+        <div class="card-body" style="background-color: lightgray; padding: 20px;">
+            <div class="row">
+                @foreach (var post in Model)
+                {
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-4 d-flex align-items-stretch">
+                        <div class="card h-100 w-100">
+                            <div class="card-body d-flex flex-column">
+                                <div class="media-container mb-3">
+                                    @if (!string.IsNullOrEmpty(post.VideoUrl))
+                                    {
+                                        <div class="embed-responsive embed-responsive-16by9">
+                                            <video controls class="embed-responsive-item" style="border-radius: 5px;">
+                                                <source src="~/videos/@post.VideoUrl" type="video/mp4">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        </div>
+                                    }
+                                    else if (!string.IsNullOrEmpty(post.ImageUrl))
+                                    {
+                                        <div class="embed-responsive embed-responsive-16by9">
+                                            <img src="~/images/@post.ImageUrl" class="embed-responsive-item" style="border-radius: 5px;">
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="embed-responsive embed-responsive-16by9">
+                                            <img src="~/images/uploadImage.jpg" class="embed-responsive-item" style="border-radius: 5px;">
+                                        </div>
+                                    }
+                                </div>
+                                <h4 class="card-title" style="font-weight: bold; color: #353839;">@post.Title</h4>
+                                <p class="card-text">
+                                    @Html.Raw(post.Description!.Length <= 200 ? post.Description : post.Description.Substring(0, 200) + "...")
+                                </p>
+                                <p class="text-muted" style="font-size: 0.9rem;">@post.CreatedAt</p>
+                                <div class="mt-auto">
+                                    <h6 class="fw-bold">Writer: @post.AuthorName</h6>
+                                    <div class="d-flex justify-content-between">
+                                        <a class="btn btn-warning btn-sm" asp-area="Admin" asp-controller="Post" asp-action="Edit" asp-route-id="@post.Id">Edit</a>
+                                        <form asp-area="Admin" asp-controller="Post" asp-action="Delete" asp-route-id="@post.Id" method="post" onsubmit="return confirm('Are you sure about deleting the post?')" class="d-inline">
+                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
         </div>
         <div class="card-footer">
             Page @(Model?.PageCount < Model!.PageNumber ? 0 : Model!.PageNumber) of @Model!.PageCount
@@ -62,16 +75,13 @@
                 DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
                 DisplayLinkToNextPage = PagedListDisplayMode.Always,
                 DisplayLinkToIndividualPages = true,
-                MaximumPageNumbersToDisplay = 5,
+                MaximumPageNumbersToDisplay = 6,
                 ContainerDivClasses = new List<string> { "d-flex", "justify-content-center" },
                 UlElementClasses = new List<string> { "pagination" },
                 LiElementClasses = new List<string> { "page-item" },
-                PageClasses = new List<string> { "page-link", "btn", "btn-primary" }, // Apply button classes here
+                PageClasses = new List<string> { "page-link", "btn", "btn-primary" },
                 ActiveLiElementClass = "active"
             })
-
         </div>
     </div>
 </div>
-
-

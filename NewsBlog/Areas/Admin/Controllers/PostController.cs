@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using NewsBlog.Data;
 using NewsBlog.Models;
 using NewsBlog.Utilities;
@@ -46,12 +47,13 @@ namespace NewsBlog.Areas.Admin.Controllers
             {
                 Id = x.Id,
                 ImageUrl = x.ImageUrl,
+                VideoUrl = x.VideoUrl,
                 Title = x.Title,
                 Description = x.Description,
                 AuthorName = x.User!.FirstName + " " + x.User!.LastName,
                 CreatedAt = x.CreatedAt                
             }).ToList();
-            int pageSize = 5;
+            int pageSize = 6;
             int pageNumber = (page ?? 1);
             return View(await PostListViewModel.OrderByDescending(x => x.CreatedAt).ToPagedListAsync(pageNumber, pageSize));
         }
@@ -80,6 +82,7 @@ namespace NewsBlog.Areas.Admin.Controllers
                 Title = post.Title,
                 Description = post.Description,
                 ImageUrl = post.ImageUrl,
+                VideoUrl = post.VideoUrl
             };
 
             return View(viewModel);
@@ -103,7 +106,12 @@ namespace NewsBlog.Areas.Admin.Controllers
 
             if (createPostViewModel.UploadImage != null)
             {
-                post.ImageUrl = Image(createPostViewModel.UploadImage);
+                post.ImageUrl = SaveFile(createPostViewModel.UploadImage, "images");
+            }
+
+            if (createPostViewModel.UploadVideo != null)
+            {
+                post.VideoUrl = SaveFile(createPostViewModel.UploadVideo, "videos");
             }
             await _db.SaveChangesAsync();
             _notification.Success("Post updated!");
@@ -137,7 +145,12 @@ namespace NewsBlog.Areas.Admin.Controllers
 
             if(createPostViewModel.UploadImage != null)
             {
-                post.ImageUrl = Image(createPostViewModel.UploadImage);
+                post.ImageUrl = SaveFile(createPostViewModel.UploadImage, "images");
+            }
+
+            if (createPostViewModel.UploadVideo != null)
+            {
+                post.VideoUrl = SaveFile(createPostViewModel.UploadVideo, "videos");
             }
 
             await _db.Posts!.AddAsync(post);
@@ -165,6 +178,15 @@ namespace NewsBlog.Areas.Admin.Controllers
                     }
                 }
 
+                if (!string.IsNullOrEmpty(autherPost.VideoUrl))
+                {
+                    var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "videos", autherPost.VideoUrl);
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                }
+
                 _db.Posts!.Remove(autherPost!);
                 await _db.SaveChangesAsync();
                 _notification.Success("Post have been deleted");
@@ -179,16 +201,35 @@ namespace NewsBlog.Areas.Admin.Controllers
             return View(new CreatePostViewModel());
         }
 
-        private string Image(IFormFile file)
+        //private string Image(IFormFile file)
+        //{
+        //    string uniqueFileName = "";
+        //    var folderPath = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+        //    uniqueFileName = Guid.NewGuid().ToString()+ "_" + file.FileName;
+        //    var filePath = Path.Combine(folderPath, uniqueFileName);
+        //    using(FileStream fileStream = System.IO.File.OpenWrite(filePath))
+        //    {
+        //        file.CopyTo(fileStream);
+        //    }
+        //    return uniqueFileName;
+        //}
+
+        private string SaveFile(IFormFile file, string folderName)
         {
-            string uniqueFileName = "";
-            var folderPath = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-            uniqueFileName = Guid.NewGuid().ToString()+ "_" + file.FileName;
+            string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+            var folderPath = Path.Combine(_webHostEnvironment.WebRootPath, folderName);
             var filePath = Path.Combine(folderPath, uniqueFileName);
-            using(FileStream fileStream = System.IO.File.OpenWrite(filePath))
+
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
             {
                 file.CopyTo(fileStream);
             }
+
             return uniqueFileName;
         }
     }

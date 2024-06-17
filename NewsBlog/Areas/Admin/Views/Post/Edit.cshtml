@@ -4,35 +4,47 @@
 }
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-lg-6">
-            <!-- Updated column size to col-lg-6 for a wider form -->
-            <div class="card">
+        <div class="col-lg-8">
+            <!-- Updated column size to col-lg-8 for a wider form -->
+            <div class="card mt-5">
                 <div class="card-header bg-dark">
-                    <h4 class="card-title text-white">Create new post</h4>
+                    <h4 class="card-title text-white">Edit Post</h4>
                 </div>
                 <div class="card-body">
                     <form asp-action="Edit" asp-controller="Post" asp-area="Admin" enctype="multipart/form-data">
                         <input type="hidden" asp-for="Id" />
                         <input type="hidden" asp-for="ImageUrl" />
+                        <input type="hidden" asp-for="VideoUrl" />
+
                         <!-- Image upload section -->
                         <div class="text-center mb-3">
-                            <!-- Centered content -->
-                            @{
-                                if (Model.ImageUrl == null)
-                                {
-                                    <img src="~/images/uploadImage.jpg" class="img-fluid mb-2" id="blogimage" />
-                                }
-                                else
-                                {
-                                    <img src="~/images/@Model.ImageUrl" class="img-fluid mb-2" id="blogimage" />
-
-                                }
+                            @if (Model.ImageUrl != null)
+                            {
+                                <img src="~/images/@Model.ImageUrl" class="img-fluid mb-2" id="blogimage" style="max-height: 200px;" />
                             }
-                            <label>Upload Image</label>
-                            <input type="file" asp-for="UploadImage" class="custom-file" />
-                            <span asp-validation-for="Description" class="text-danger"></span>
-
+                            <label class="btn btn-outline-secondary btn-block">
+                                Upload Image
+                                <input type="file" asp-for="UploadImage" class="d-none" id="uploadImage" accept="image/*" />
+                            </label>
+                            <span asp-validation-for="UploadImage" class="text-danger"></span>
                         </div>
+
+                        <!-- Video upload section -->
+                        <div class="text-center mb-3">
+                            @if (Model.VideoUrl != null)
+                            {
+                                <video controls class="img-fluid mb-2" id="blogvideo" style="max-height: 200px;">
+                                    <source src="~/videos/@Model.VideoUrl" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            }
+                            <label class="btn btn-outline-secondary btn-block">
+                                Upload Video
+                                <input type="file" asp-for="UploadVideo" class="d-none" id="uploadVideo" accept="video/*" />
+                            </label>
+                            <span asp-validation-for="UploadVideo" class="text-danger"></span>
+                        </div>
+
                         <!-- Text fields section -->
                         <div class="mb-3">
                             <label>Title</label>
@@ -41,7 +53,7 @@
                         </div>
                         <div class="mb-3">
                             <label>Description</label>
-                            <textarea id="textEditor" asp-for="Description" class="form-control" rows="10" style="resize:none;"></textarea> <!-- Made textarea non-resizable -->
+                            <textarea id="textEditor" asp-for="Description" class="form-control" rows="10" style="resize:none;"></textarea>
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
 
@@ -63,10 +75,31 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        $(".custom-file").on("change", function () {
-            var fileName = $(this).val().split("\\").pop();
-            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-            document.getElementById('blogimage').src = window.URL.createObjectURL(this.files[0])
+        document.getElementById('uploadImage').addEventListener('change', function () {
+            var file = this.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('blogimage').src = e.target.result;
+                    document.getElementById('blogimage').style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('uploadVideo').addEventListener('change', function () {
+            var file = this.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var video = document.getElementById('blogvideo');
+                    var source = video.getElementsByTagName('source')[0];
+                    source.src = e.target.result;
+                    video.load();
+                    video.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
         });
     </script>
 }
